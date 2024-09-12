@@ -1,0 +1,105 @@
+
+<section id="contacto" class="w-full max-w-2xl mx-auto py-12 md:py-24">
+  <div class="space-y-4 mb-8">
+    <div class="flex items-center justify-between h-25">
+      <h1 class="text-3xl font-bold">Cuéntanos tu opinión</h1>
+      <img
+        src="{{ url_for('static', filename='images/logo.jpg') }}"
+        alt="Company Logo"
+        width="90"
+        height="80"
+        class="hidden md:block "
+      />
+    </div>
+  </div>
+  <div
+    class="rounded-lg border bg-card text-card-foreground shadow-sm"
+    data-v0-t="card"
+  >
+    <div class="p-6 grid gap-6">
+      <div class="grid gap-4">
+        <div class="space-y-2">
+          <label
+            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="name"
+          >
+            ¿Qué edad tienes?
+          </label>
+          <input
+            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            id="edad"
+            type="number"
+            min="14"
+            max="100"
+            required
+            placeholder="Ingresa tu edad"
+          />
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <label
+          class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          for="description"
+        >
+          ¿Cómo podemos mejorar tu experiencia?
+        </label>
+        <textarea
+          required
+          class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[150px]"
+          id="mensaje"
+          placeholder="Dinos que podemos mejorar"
+        ></textarea>
+      </div>
+      <div class="space-y-2">
+        <button class="btn btn-success" id="submit-btn" disabled>Enviar</button>
+        <p id="confirmation-message" class="text-green-600 hidden">¡Tu opinión ha sido enviada!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<script>
+  $(document).ready(function () {
+
+    $('#mensaje').on('input', function () {
+      // Si el textarea tiene texto, activar el botón, de lo contrario desactivarlo
+      if ($(this).val().trim().length > 2) {
+        $('#submit-btn').prop('disabled', false);
+      } else {
+        $('#submit-btn').prop('disabled', true);
+      }
+    });
+
+    $('#submit-btn').on('click', function () {
+      $.ajax({
+        url: "/send", // Reemplaza la URL con la del backend
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ edad: $('#edad').val(), mensaje: $('#mensaje').val() }),
+        success: function (data) {
+          // Limpiar los campos del formulario
+          $('#edad').val('');
+          $('#mensaje').val('');
+
+          // Desactivar el botón nuevamente
+          $('#submit-btn').prop('disabled', true);
+
+          // Mostrar el mensaje de confirmación
+          $('#confirmation-message').removeClass('hidden').fadeIn();
+
+          // Ocultar el mensaje de confirmación después de 3 segundos
+          setTimeout(function () {
+            $('#confirmation-message').fadeOut();
+          }, 3000);
+        },
+        error: function (error) {
+          console.error("Error:", error);
+        },
+      });
+    });
+  });
+</script>

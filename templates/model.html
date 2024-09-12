@@ -1,0 +1,150 @@
+
+  <body class="is-boxed has-animations">
+    <section
+      id="prueba"
+      style="background-color: #cfc9b7"
+      class="min-h-screen flex items-center justify-center"
+    >
+      <div class="container mx-auto px-6 py-12">
+        <div class="flex flex-col lg:flex-row items-start justify-between">
+          <!-- Formulario -->
+          <div class="lg:w-1/2">
+            <div class="text-white lg:w-full">
+              <h1
+                class="text-3xl text-center font-semibold capitalize lg:text-5xl mb-6"
+              >
+                ¡Experiméntalo!
+              </h1>
+              <form class="formulario space-y-4">
+                <div class="w-full p-5 bg-white rounded-lg font-mono shadow-md">
+                  <label
+                    class="block text-dark text-2xl font-bold mb-2"
+                    for="unique-input"
+                    >Descríbete, puedes utilizar:</label
+                  >
+                  <label
+                    class="block text-dark text-sm mb-2"
+                    for="unique-input"
+                  >
+                    Por favor, proporciona una breve descripción que incluya:
+                    <ul class="list-disc pl-5" id="characteristics-list">
+                      <li data-category="Género">Género</li>
+                      <li data-category="Tono de piel">Tono de piel</li>
+                      <li data-category="Contextura física">
+                        Contextura física
+                      </li>
+                      <li data-category="Forma del rostro">Forma del rostro</li>
+                      <li data-category="Estatura">Estatura</li>
+                      <li data-category="Longitud del cuello">
+                        Longitud del cuello
+                      </li>
+                      <li data-category="Personalidad">
+                        Un rasgo de personalidad
+                      </li>
+                      <li data-category="Evento">
+                        El evento al que asistirás
+                      </li>
+                    </ul>
+                    <p class="mt-2 italic">Ejemplo:</p>
+                    <p class="italic text-gray-600">
+                      "Soy una mujer alta, de ojos verdes, cabello largo, soy
+                      delgada y de piel blanca, mi cuello es corto y me
+                      considero una mujer segura de mí misma, asistiré a una
+                      boda"
+                    </p>
+                    <hr class="my-3" />
+                  </label>
+                  <textarea
+                    class="mt-4 text-sm custom-input w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm transition duration-300 ease-in-out transform focus:-translate-y-1 focus:outline-blue-300 hover:shadow-lg hover:border-blue-300 bg-dark"
+                    placeholder="Escribe tu descripción aquí"
+                    type="text"
+                    id="name"
+                    value="Soy una mujer alta, de ojos verdes, cabello largo, soy delgada y de piel blanca, mi cuello es corto y me considero una mujer segura de mí misma, asistiré a una boda"
+                  ></textarea>
+                  <button
+                    type="button"
+                    class="btn btn-success mt-4"
+                    id="toggle-suggestions"
+                    disabled
+                  >
+                    Probar
+                  </button>
+                  <!-- Sugerencias -->
+                  
+                  <div
+                    id="suggestions"
+                    class=" text-dark mt-6 lg:mt-0 lg:ml-8 p-5 bg-white rounded-lg"
+                  >
+                  
+                    <!-- Aquí van las sugerencias dinámicas -->
+                    <!-- Las imágenes sugeridas se agregarán aquí -->
+                  </div>
+                  
+                  
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div
+            id="recommended-images"
+            class="lg:w-1/3 mt-10 lg:mt-0 lg:ml-8 p-5 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 transition-transform duration-300 ease-in-out"
+          >
+             
+          </div>
+
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal para el carrusel de imágenes -->
+
+    <div
+      class="modal fade"
+      id="imageCarouselModal"
+      tabindex="-1"
+      aria-labelledby="carouselModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="carouselModalLabel">Recomendaciones</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div
+              id="carouselImages"
+              class="carousel slide"
+              data-bs-ride="carousel"
+            >
+              <div class="carousel-inner" id="carouselInner"></div>
+              <button
+                class="carousel-control-prev"
+                type="button"
+                data-bs-target="#carouselImages"
+                data-bs-slide="prev"
+              >
+                <i class="fa-solid fa-arrow-left text-dark text-2xl"></i>
+              </button>
+              <button
+                class="carousel-control-next"
+                type="button"
+                data-bs-target="#carouselImages"
+                data-bs-slide="next"
+              >
+                <i class="fa-solid fa-arrow-right text-dark text-2xl"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>

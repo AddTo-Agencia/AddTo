@@ -1,0 +1,72 @@
+<section id="preguntas" class="bg-white text-dark dark:bg-gray-900">
+  <div class="container mx-auto max-w-4xl px-6 py-10">
+    <h1 class="text-center text-4xl font-semibold text-dark dark:text-white">
+      Preguntas Frecuentes
+    </h1>
+
+    <div class="mt-12 space-y-4" id="faq">
+      <div class="border border-gray-200 rounded-lg dark:border-gray-700">
+        <button class="w-full text-left flex items-center justify-between p-4 font-semibold text-dark dark:text-white focus:outline-none"
+          onclick="toggleFaq(1)">
+          <span>¿Cómo funciona?</span>
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+        <div id="faq1" class="hidden px-4 pb-4 text-sm text-dark dark:text-gray-300">
+          La forma de utilización es muy simple y sencilla, le brindamos al modelo datos sencillos acerca de nuestra personalidad, aspecto físico y evento al que asistiremos, y el nos brindará recomendaciones profesionales, ejemplo:
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded-lg dark:border-gray-700">
+        <button class="w-full text-left flex items-center justify-between p-4 font-semibold text-dark dark:text-white focus:outline-none"
+          onclick="toggleFaq(2)">
+          <span>¿Qué conseguiré al utilizarlo?</span>
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+        <div id="faq2" class="hidden px-4 pb-4 text-sm text-dark dark:text-gray-300">
+          Sentirá un apoyo mucho más personalizado y profesional a la hora de adquirir joyería o relojería.
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded-lg dark:border-gray-700">
+        <button class="w-full text-left flex items-center justify-between p-4 font-semibold text-dark dark:text-white focus:outline-none"
+          onclick="toggleFaq(3)">
+          <span>¿Cómo conseguimos diferenciarnos?</span>
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+        <div id="faq3" class="hidden px-4 pb-4 text-sm text-dark dark:text-gray-300">
+          En un sistema de oferta y demanda tan amplio, caemos en diversidad de páginas con listas infinitas de productos, muchas veces sin poder tomar una decisión y experimentando sugerencias que no se adaptan a nuestras necesidades. Nuestra diferencia radica en la experiencia que se vive al obtener una recomendación de producto mucho más personalizada en base a nuestro aspecto físico, personalidad y evento al que asistiremos.
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded-lg dark:border-gray-700">
+        <button class="w-full text-left flex items-center justify-between p-4 font-semibold text-dark dark:text-white focus:outline-none"
+          onclick="toggleFaq(4)">
+          <span>¿Qué datos debo utilizar?</span>
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+        <div id="faq4" class="hidden px-4 pb-4 text-sm text-dark dark:text-gray-300">
+          La información inicial nos permite expresar nuestro: aspecto físico, personalidad y evento al que buscamos asistir. Podemos obtener recomendaciones de forma sencilla con estos tres aspectos. Si deseamos algo aun más personalizado y profesional, podemos utilizar aspectos tales como: estilo del cabello, longitud del cuello, ancho de la muñeca, contextura física, forma del rostro, textura de piel, color de ojos, color de cabello, estatura y tono de piel.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function toggleFaq(index) {
+    const faq = document.getElementById('faq' + index);
+    faq.classList.toggle('hidden');
+  }
+</script>
