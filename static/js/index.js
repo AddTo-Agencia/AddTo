@@ -68,7 +68,7 @@ $(document).ready(function () {
             'mionuciosa', 'innovador.', 'descudiada.', 'conservador.',
             'planificador', 'perseverante', 'disciplinado', 'espontáneo',
             'fragil', 'emocional descuidada', 'mininuciosa', 'convenciona',
-            'organizada', 'ambiciosa', '', 'descuidada.', 'extrovetido',
+            'organizada', 'ambiciosa','descuidada.', 'extrovetido',
             'conservardor.', 'pragmático tolerante', 'rígifo', 'convecional',
             'minucioso descuidado', 'organizado'],
 
