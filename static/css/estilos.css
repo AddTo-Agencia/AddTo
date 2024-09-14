@@ -1,0 +1,132 @@
+.frame {
+    background-color: #d49c0b;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .frame .div {
+    background-color: #d49c0b;
+    height: 768px;
+    overflow: hidden;
+    position: relative;
+    width: 1366px;
+  }
+  
+  .frame .overlap-group {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 4px #00000040;
+    height: 585px;
+    left: -13px;
+    position: absolute;
+    top: 85px;
+    width: 734px;
+  }
+  
+  .frame .text-wrapper {
+    color: #000000;
+    font-family: "Inconsolata-Regular", Helvetica;
+    font-size: 36px;
+    font-weight: 400;
+    left: 319px;
+    letter-spacing: 0;
+    line-height: 36px;
+    position: absolute;
+    top: 75px;
+    width: 265px;
+  }
+  
+  .frame .text-wrapper-2 {
+    color: #000000;
+    font-family: "Inconsolata-Regular", Helvetica;
+    font-size: 15px;
+    font-weight: 400;
+    left: 337px;
+    letter-spacing: 0;
+    line-height: 15px;
+    position: absolute;
+    top: 258px;
+    width: 293px;
+  }
+  
+  .frame .soy-una-mujer-alta {
+    color: #000000;
+    font-family: "Inconsolata-Regular", Helvetica;
+    font-size: 12px;
+    font-weight: 400;
+    left: 270px;
+    letter-spacing: 0;
+    line-height: 12px;
+    position: absolute;
+    text-align: center;
+    top: 172px;
+    width: 333px;
+  }
+  
+  .frame .text-wrapper-3 {
+    color: #000000;
+    font-family: "Inconsolata-Regular", Helvetica;
+    font-size: 12px;
+    font-weight: 400;
+    left: 410px;
+    letter-spacing: 0;
+    line-height: 12px;
+    position: absolute;
+    top: 142px;
+    width: 70px;
+  }
+  
+  .frame .overlap {
+    height: 261px;
+    left: 882px;
+    position: absolute;
+    top: 405px;
+    width: 177px;
+  }
+  
+  .frame .aretes-de-argolla {
+    height: 1px;
+    left: 169px;
+    object-fit: cover;
+    position: absolute;
+    top: 134px;
+    width: 1px;
+  }
+  
+  .frame .anillo-boda {
+    height: 261px;
+    left: 0;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    width: 177px;
+  }
+  
+  .frame .img {
+    height: 264px;
+    left: 882px;
+    object-fit: cover;
+    position: absolute;
+    top: 90px;
+    width: 177px;
+  }
+  
+  .frame .anillo-boda-2 {
+    height: 264px;
+    left: 1090px;
+    object-fit: cover;
+    position: absolute;
+    top: 90px;
+    width: 169px;
+  }
+  
+  .frame .anillo-boda-hombre {
+    height: 258px;
+    left: 1090px;
+    object-fit: cover;
+    position: absolute;
+    top: 405px;
+    width: 172px;
+  }

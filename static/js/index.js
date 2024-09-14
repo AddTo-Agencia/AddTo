@@ -114,8 +114,10 @@ $(document).ready(function () {
         // Habilitar el botón si hay al menos 2 características detectadas
         if (caracteristicasDetectadas >= 2) {
             $("#toggle-suggestions").prop("disabled", false);
+            $("#toggle-suggestions").css("background-color", "#a8845c");
         } else {
             $("#toggle-suggestions").prop("disabled", true);
+            $("#toggle-suggestions").css("background-color", "#bca484");
         }
     });
 
@@ -184,11 +186,9 @@ document.addEventListener("click", (event) => {
                   
                     data.images.forEach(function (imageUrl, index) {
                         const imageElement = `
-
-                <div class="image-thumb card cursor-pointer">
-                    <img src="${imageUrl}" class="rounded-full cursor-pointer" alt="Image ${index + 1}" data-index="${index}">
+                <div class="image-thumb card cursor-pointer w-100">
+                    <img src="${imageUrl}" class="w-full h-auto rounded-lg shadow-md" alt="Image ${index + 1}" data-index="${index}">
                 </div>
-
                 `;
                         imagesContainer.append(imageElement);
                     });

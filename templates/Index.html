@@ -19,7 +19,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Estilos personalizados -->
-    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}" />
+
     <!-- Icono del sitio -->
     <link rel="icon" href="{{ url_for('static', filename='images/logo.jpg') }}" type="icon" />
 
@@ -113,6 +114,9 @@
 
   {% include 'about.html' %}
   {% include 'team.html' %}
+
+  {% include 'social.html' %}
+
   {% include 'question.html' %}
   {% include 'model.html' %}
   {% include 'Contact.html' %}
@@ -127,7 +131,6 @@
           <img class="w-12 h-12 rounded-full" src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Logo Light" />
           <span class="ml-3 text-2xl font-semibold">AddTo</span>
         </a>
-       
       </div>
       
 
