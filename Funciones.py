@@ -1,7 +1,7 @@
 from features import personalidades, caracteristicas_fisicas, Eventos, generos
 import spacy
 import pandas as pd
-from labels import carpetas,categorias,SubCarpeta
+from labels import carpetas,categorias,SubCarpeta,subCarpetaHombre,subCarpetaMujer
 import os
 from fuzzywuzzy import fuzz, process
 import numpy as np
@@ -86,7 +86,7 @@ def extract_caracteristicas(text):
     # Crear el DataFrame
     df_data = {
         'Categoría': found_categorias ,
-        'Género': found_genero or 'Desconocido',
+        #'Género': found_genero or 'Desconocido',
         'Tono de piel': found_caracteristicas_fisicas.get('tono de piel', 'Desconocido') or 'Desconocido',
         'Forma del rostro': found_caracteristicas_fisicas.get('forma del rostro', 'Desconocido') or 'Desconocido',
         'Contextura física': found_caracteristicas_fisicas.get('contextura física', 'Desconocido') or 'Desconocido',
@@ -105,32 +105,29 @@ def extract_caracteristicas(text):
 
 
 
-def categorize_predictions(y_pred):
+def categorize_predictions(y_pred, labels={}):
     # Invertir los diccionarios de etiquetas para obtener categoría a partir del índice
-    #inverse_labels_Categoria = {v: k for k, v in categorias.items()}
-    inverse_labels_SubCarpetas = {v: k for k, v in SubCarpeta.items()}
-    #inverse_labels_Carpetas = {v: k for k, v in carpetas.items()}
-    
-    # Variables para almacenar las categorías
-    Categoria = []
+    inverse_labels_SubCarpetas = {v: k for k, v in labels.items()}
+
+    # Variable para almacenar las subcarpetas
     Subcarpeta = []
-    Carpetas = []
 
     # Iterar sobre cada predicción
     for pred in y_pred.astype(int):
-        #categoria_idx = np.maximum(pred[0], 0)
         subcarpeta_idx = np.maximum(pred, 0)
 
-        # Obtener la categoría de cada índice
-        #categoria = inverse_labels_Categoria.get(categoria_idx, "Unknown")
+        # Obtener la subcarpeta de cada índice
         subcarpeta = inverse_labels_SubCarpetas.get(subcarpeta_idx, "Unknown")
-        #carpetas = inverse_labels_Carpetas.get(subcarpeta_idx, "Unknown")
 
-        # Agregar a las listas
-      #  Carpetas.append(carpetas)
+        # Agregar la subcarpeta a la lista
         Subcarpeta.append(subcarpeta)
 
-    return subcarpeta
+    # Eliminar duplicados convirtiendo la lista a un conjunto y luego de nuevo a lista
+    Subcarpeta = list(set(Subcarpeta))
+
+    print(Subcarpeta)
+    return Subcarpeta
+
 
 
 def enviar_correo(Edad, mensaje):
@@ -273,6 +270,7 @@ def split_column_and_expand(df, column_to_split):
     df_expanded = df_expanded[df_expanded[column_to_split].notna() & (df_expanded[column_to_split] != '')]
 
     return df_expanded
+
 
 
 def expand_all_columns(df):

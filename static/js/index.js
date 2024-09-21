@@ -106,6 +106,11 @@ $(document).ready(function () {
         return count;
     }
 
+    function autoResize(textarea) {
+        textarea.style.height = 'auto'; // Reset height to calculate new height
+        textarea.style.height = (textarea.scrollHeight) + 'px'; // Set height based on scroll height
+      }
+
     // Manejar cambios en el campo de texto
     $("#name").on("input", function () {
         const campo = $(this).val();
@@ -158,52 +163,71 @@ document.addEventListener("click", (event) => {
     }
 });
 
+$("#select").on("change", function (event) {
+   const valor = $(this).val();
+   $('.hombre, .mujer').attr('hidden', true); // Ocultar todos los elementos al principio
+
+   if(valor == 'hombre'){
+      $('.hombre').removeAttr('hidden'); // Mostrar solo los elementos de hombre
+   } else if(valor == 'mujer'){
+      $('.mujer').removeAttr('hidden'); // Mostrar solo los elementos de mujer
+   }
+})
+
 
     // Handle form submit
     // Start of Selection
     $("#toggle-suggestions").on("click", function (event) {
         event.preventDefault();
 
-        const nameInput = $("#name").val();
+        let nameInput = $("#name").val();
         const imagesContainer = $("#recommended-images");
         imagesContainer.empty(); // Limpiar imágenes previas
+        const genero = $(this).val();
+
+        nameInput += ","+genero;
 
         $("#spinner").removeClass("hidden");
         $(".container").addClass("opacity-50");
 
         // Simulación de petición AJAX
-        $.ajax({
-            url: "/predict",
-            method: "POST",
-            contentType: "application/json",
-            data: JSON.stringify({ texto: nameInput }),
-            success: function (data) {
-                console.log(data);
-                
-                    // Si `data.images` es un array de URLs de imágenes
-                if (data.images && data.images.length > 0) {
-                    imagesContainer.empty(); // Limpiar imágenes previas
-                  
-                    data.images.forEach(function (imageUrl, index) {
-                        const imageElement = `
-                <div class="image-thumb card cursor-pointer w-100">
-                    <img src="${imageUrl}" class="w-full h-auto rounded-lg shadow-md" alt="Image ${index + 1}" data-index="${index}">
-                </div>
-                `;
-                        imagesContainer.append(imageElement);
-                    });
-                    
-                  
-                }
-            },
-            error: function (error) {
-                console.error("Error:", error);
-            },
-            complete: function () {
-                $("#spinner").addClass("hidden");
-                $(".container").removeClass("opacity-50");
-            },
+       $.ajax({
+    url: "/predict",
+    method: "POST",
+    contentType: "application/json",
+    data: JSON.stringify({ texto: nameInput }),
+    success: function (data) {
+        console.log(data);
+        
+        // Limpiar imágenes previas
+        imagesContainer.empty(); 
+        
+        // Recorrer todas las propiedades del objeto data
+        Object.keys(data).forEach(function (key) {
+            // Verificar si la propiedad comienza con "images"
+            if (key.startsWith("images") && data[key] && data[key].length > 0) {
+                // Recorrer cada array de imágenes dentro de la propiedad
+                data[key].forEach(function (imageUrl, index) {
+                    const imageElement = `
+                        <div class="image-thumb card cursor-pointer w-auto">
+                            <img src="${imageUrl}" class="w-full h-auto rounded-lg shadow-md" alt="Image ${index + 1}" data-index="${index}">
+                        </div>
+                    `;
+                    imagesContainer.append(imageElement);
+                });
+            }
         });
+    },
+    error: function (error) {
+        console.error("Error:", error);
+    },
+    complete: function () {
+        $("#spinner").addClass("hidden");
+        $(".container").removeClass("opacity-50");
+    },
+});
+
+  
 
         // Agregar botón de eliminar al contenedor
         

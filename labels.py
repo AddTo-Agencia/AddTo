@@ -63,3 +63,46 @@ SubCarpeta = {
  'Reloj_masculino / C': 37,
  'Reloj_masculino / D': 38
  }
+
+subCarpetaHombre= {
+    'Anillo_boda_hombre / A': 0,
+ 'Anillo_boda_hombre / B': 1,
+ 'Anillo_boda_hombre / C': 2,
+ 'Anillo_boda_hombre / D': 3,
+ 'Anillos_masculinos / A': 4,
+ 'Anillos_masculinos / B': 5,
+ 'Anillos_masculinos / C': 6,
+ 'pulsera_masculina / A': 7,
+ 'pulsera_masculina / B': 8,
+ 'pulsera_masculina / C': 9,
+ 'pulsera_masculina / D': 10,
+ 'reloj_masculino / A': 11,
+ 'reloj_masculino / B': 12,
+ 'reloj_masculino / C': 13,
+ 'reloj_masculino / D': 14}
+
+
+subCarpetaMujer= {'Anillo_boda_mujer  / A': 0,
+ 'Anillo_boda_mujer  / B': 1,
+ 'Anillo_compromiso_mujer / A': 2,
+ 'Anillo_compromiso_mujer / B': 3,
+ 'Anillo_compromiso_mujer / C': 4,
+ 'Anillo_compromiso_mujer / D': 5,
+ 'Anillos_femeninos / A': 6,
+ 'Anillos_femeninos / B': 7,
+ 'Anillos_quinceañeras / A': 8,
+ 'Anillos_quinceañeras / B': 9,
+ 'Anillos_quinceañeras / C': 10,
+ 'Anillos_quinceañeras / D': 11,
+ 'Collar_colgante_femenino / A': 12,
+ 'Collar_colgante_femenino / B': 13,
+ 'Collar_colgante_femenino / C': 14,
+ 'Collar_colgante_femenino / D': 15,
+ 'Collar_colgante_femenino / E': 16,
+ 'Collar_perlas_femenino / A': 17,
+ 'Collar_perlas_femenino / B': 18,
+ 'Collar_perlas_femenino / C': 19,
+ 'Collar_perlas_femenino / D': 20,
+ 'Collar_perlas_femenino / E': 21,
+ 'Gargantillas_femeninas / A': 22,
+ 'Gargantillas_femeninas / B': 23}

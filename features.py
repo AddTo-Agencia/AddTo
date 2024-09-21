@@ -36,20 +36,14 @@ caracteristicas_fisicas = {
 }
 
 Eventos = {
-    "Evento": ['boda', 'matrimonio', 'pre-nupcial', 'propuesta', 'compromiso',
-       'cena de empresa', 'almuerzos ejecutivos', 'fiesta de cumpleaños',
-       'reunion familiar', 'comer con amigos', 'evento deportivo',
-       'concierto', 'navidad y año nuevo', 'día de la madre',
-       'día del padre.', 'quinceañera', 'quince años',
-       'eventos de caridad', 'aniversario', 'almuerzo ejecutivo',
-       'comida con amigos', 'eventos de cariudad', 'graduaciones',
-       'aniversarios', 'fiestas de cumpleaños', 'reuniones familiares',
-       'gala', 'evento de caridad', 'graduación',
-       'ceremonia de premiación', 'exposición de arte', 'inauguración.',
-       'comida con amgios', 'reunión familiar', 'quinceaños',
-       'san valentín', 'evento de networking', 'cena con amigos',
-       'navidad', 'año nuevo.', 'bodas', 'recepción dimplomática',
-       'reunión de negocios', 'inauguruación.']
+    "Evento": ['boda', 'matrimonio', 'pre-nupcial', 'propuesta', 'compromiso','cena de empresa', 'almuerzos ejecutivos', 'fiesta de cumpleaños',
+       'reunion familiar', 'comer con amigos', 'evento deportivo','concierto', 'navidad y año nuevo', 'día de la madre',
+       'día del padre.', 'quinceañera', 'quince años','eventos de caridad', 'aniversario', 'almuerzo ejecutivo',
+       'comida con amigos', 'eventos de cariudad', 'graduaciones','aniversarios', 'fiestas de cumpleaños', 'reuniones familiares',
+       'gala', 'evento de caridad', 'graduación','ceremonia de premiación', 'exposición de arte', 'inauguración.',
+       'comida con amigos', 'reunión familiar', 'quinceaños','san valentín', 'evento de networking', 'cena con amigos',
+       'navidad', 'año nuevo.', 'bodas', 'recepción dimplomática','reunión de negocios', 'inauguruación.'
+       ]
 }
 
 
