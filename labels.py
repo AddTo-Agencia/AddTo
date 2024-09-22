@@ -12,14 +12,16 @@ carpetas = {
 
 
 
-categorias = {'Anillo de boda': 0,
+categorias = {
+ 'Anillo de boda': 0,
  'Anillo de compromiso': 1,
  'Anillo': 2,
  'Collar con colgante': 3,
  'Collar de perlas': 4,
  'Gargantillas femeninas': 5,
  'Pulsera masculina': 6,
- 'Reloj masculino': 7}
+ 'Reloj masculino': 7
+}
 
 
 SubCarpeta = {

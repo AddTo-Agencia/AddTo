@@ -1,6 +1,6 @@
 <body class="is-boxed has-animations">
 
-<section
+  <section
   id="prueba"
   style="background-color: #E0A40A;"
   class="min-h-screen flex items-center justify-center"
@@ -8,36 +8,34 @@
   <div class="container mx-auto px-6 py-12">
     <div class="flex flex-col lg:flex-row items-start justify-between">
       <!-- Formulario -->
-     
-      <div class=" ">
+      <div class="">
         <div class="text-white">
-       
           <form class="p-4 text-dark bg-white rounded-lg font-mono shadow-md space-y-4 flex flex-col items-start">
             <div>
               <h1 class="p-4 text-3xl text-center font-semibold lg:text-5xl mb-4">
                 EXPERIMÉNTALO
               </h1>
-          
+
               <label class="block text-dark text-sm mb-2" for="select">
                 <select class="form-control w-full p-2 border border-gray-300 rounded-lg" id="select">
                   <option value="hombre">Hombre</option>
                   <option value="mujer" selected>Mujer</option>
                 </select>
-          
+
                 <div class="hombre w-full max-w-md p-4 mt-4 bg-gray-100 rounded-lg transition-all duration-300 ease-in-out" hidden>
                   <p class="text-center font-semibold">Ejemplo Masculino:</p>
                   <p class="mt-3 text-gray-600 text-center">
                     "Soy un hombre alto, de ojos verdes, cabello largo, soy delgado y de piel blanca, mi cuello es corto y me considero un hombre seguro de mí mismo, asistiré a un evento deportivo"
                   </p>
                 </div>
-          
+
                 <div class="mujer w-full max-w-md p-4 mt-4 bg-gray-100 rounded-lg transition-all duration-300 ease-in-out">
                   <p class="text-center font-semibold">Ejemplo Femenino:</p>
                   <p class="mt-3 text-gray-600 text-center">
                     "Soy una mujer alta, de ojos verdes, cabello largo, soy delgada y de piel blanca, mi cuello es corto y me considero una mujer segura de mí misma, asistiré a una boda"
                   </p>
                 </div>
-          
+
                 <p class="mt-4 text-xl text-center font-semibold mb-6">
                   ¿Cómo puedo usarlo?
                   <button type="button" data-bs-toggle="modal" data-bs-target="#usageModal">
@@ -45,7 +43,7 @@
                   </button>
                 </p>
               </label>
-          
+
               <div class="w-full">
                 <textarea
                   class="mt-4 bg-dark text-white w-full px-6 py-4 border border-gray-300 rounded-lg transition duration-300 ease-in-out focus:outline-blue-300"
@@ -55,7 +53,7 @@
                   oninput="autoResize(this)"
                 ></textarea>
               </div>
-          
+
               <button
                 class="h-10 bg-[#bca484] text-white w-full rounded-full mt-4 shadow-xl hover:shadow-2xl transition-shadow duration-300"
                 id="toggle-suggestions"
@@ -65,53 +63,24 @@
               </button>
             </div>
           </form>
-          
-
         </div>
+      </div>
+
+      <!-- Espaciado adicional entre el formulario y el contenedor de reacciones -->
+      <div hidden id="reacionContainer" class="card p-4 shadow-sm lg:ml-10 mt-6 lg:mt-0">
+     
       </div>
 
       <!-- Recomendaciones de imágenes -->
       <div
         id="recommended-images"
         class="w-full lg:w-1/2 p-3 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 transition-transform duration-300 ease-in-out"
-      ></div>
+      >
     </div>
+
+    
   </div>
 </section>
-
-
-
-
-
-
-<!--
-
-<div class="frame">
-  <div class="div">
-    <div class="overlap-group">
-      <div class="text-wrapper">EXPERIMÉNTALO</div>
-      <div class="text-wrapper-2">¿Cómo puedo usarlo?</div>
-      <p class="soy-una-mujer-alta">
-        "Soy una mujer alta, de ojos verdes, cabello largo, soy delgada y de piel blanca, mi cuello es corto y me considero una mujer segura de mí misma, asistiré a una boda"
-      </p>
-      <div class="text-wrapper-3">Ejemplo:</div>
-      </div>
-      <div class="overlap">
-        <img class="aretes-de-argolla" alt="Aretes de argolla" src="https://cdn-media.glamira.com/media/product/newgeneration/view/1/sku/gwd-n1038/womenstone/diamond-zirconia_AAAAA/alloycolour/white_red/width/w5/profile/prA/surface/polished_icematte.jpg" />
-        <img class="anillo-boda" alt="Anillo boda" src="https://cdn-media.glamira.com/media/product/newgeneration/view/1/sku/gwd-n1038/womenstone/diamond-zirconia_AAAAA/alloycolour/white_red/width/w5/profile/prA/surface/polished_icematte.jpg" />
-      </div>
-      <img class="img" alt="Anillo boda" src="https://cdn-media.glamira.com/media/product/newgeneration/view/1/sku/gwd-n1038/womenstone/diamond-zirconia_AAAAA/alloycolour/white_red/width/w5/profile/prA/surface/polished_icematte.jpg" />
-      <img class="anillo-boda-2" alt="Anillo boda" src="https://cdn-media.glamira.com/media/product/newgeneration/view/1/sku/gwd-n1038/womenstone/diamond-zirconia_AAAAA/alloycolour/white_red/width/w5/profile/prA/surface/polished_icematte.jpg" />
-      <img class="anillo-boda-hombre" alt="Anillo boda hombre" src="https://cdn-media.glamira.com/media/product/newgeneration/view/1/sku/gwd-n1038/womenstone/diamond-zirconia_AAAAA/alloycolour/white_red/width/w5/profile/prA/surface/polished_icematte.jpg" />
-    </div>
-  </div>
-  
-  -->
-  
-
-
-
-
 
 
 

@@ -21,8 +21,11 @@ modelo_hombre = joblib.load('./Models/model_x_hombre.pkl')
 vectorizadorMujer = joblib.load('./Models/vectorizadorMujer.pkl')
 vectorizadorHombre = joblib.load('./Models/vectorizadorHombre.pkl')
 
+
 # Crear una instancia de la aplicación Flask
 app = Flask(__name__)
+
+app.config['DEBUG'] = True
 
 # Ruta para la página de inicio
 @app.route('/')

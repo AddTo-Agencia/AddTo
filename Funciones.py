@@ -129,53 +129,33 @@ def categorize_predictions(y_pred, labels={}):
     return Subcarpeta
 
 
-
 def enviar_correo(Edad, mensaje):
+    import yagmail
     yag = yagmail.SMTP('odiseorincon@gmail.com', 'zwts ittk yfpm cvmi')
-    
+
     mensaje_html = f"""
         <html>
         <head>
+            <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
             <style>
                 body {{
-                    background-color: #f3f4f6;
+                    background-color: #f8f9fa;
                     padding: 24px;
                     font-family: 'Arial', sans-serif;
                 }}
                 .card {{
                     max-width: 400px;
                     margin: 0 auto;
-                    background-color: white;
                     border-radius: 15px;
                     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                     padding: 20px;
                 }}
-                .user-info {{
-                    display: flex;
-                    align-items: center;
-                    gap: 16px;
-                }}
-                .user-info img {{
-                    width: 50px;
-                    height: 50px;
-                    border-radius: 50%;
-                }}
-                .user-details {{
-                    display: flex;
-                    flex-direction: column;
-                }}
-                .user-name {{
-                    font-size: 20px;
-                    font-weight: bold;
-                    margin: 0;
-                }}
                 .user-age {{
-                    color: #6b7280;
-                    font-size: 14px;
+                    color: #6c757d;
                 }}
                 .message {{
                     margin-top: 16px;
-                    color: #4b5563;
+                    color: #495057;
                     font-size: 16px;
                     line-height: 1.5;
                 }}
@@ -183,13 +163,13 @@ def enviar_correo(Edad, mensaje):
         </head>
         <body>
             <div class="card">
-                <div class="user-info">
-                    <div class="user-details">
-                        <p class="user-age">{Edad} años de Edad</p>
+                <div class="card-body">
+                    <h5 class="card-title">Información del Usuario</h5>
+                    <p class="card-text user-age"><strong>{Edad}</strong> años de Edad</p>
+                    <hr>
+                    <div class="message">
+                        {mensaje}
                     </div>
-                </div>
-                <div class="message">
-                    {mensaje}
                 </div>
             </div>
         </body>

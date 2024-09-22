@@ -175,6 +175,44 @@ $("#select").on("change", function (event) {
 })
 
 
+const enviarReaccion = () =>{
+      // Obtener la reacción seleccionada
+      const selectedReaction = $('input[name="reaction"]:checked').val();
+    
+      // Verificar si hay una reacción seleccionada
+  
+      if (selectedReaction) {
+        // Enviar la reacción al endpoint /send
+        $("#reacionContainer").attr("hidden",true);
+        $.ajax({
+          url: '/send',
+          method: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify({ 
+              mensaje: "El usuario presiono el boton: "+selectedReaction ,
+              edad:"Desconodido los"
+          
+          }),
+          success: function(response) {
+            console.log('Reacción enviada:', response);
+            //alert('Tu reacción ha sido enviada: ' + selectedReaction);
+          },
+          error: function(error) {
+            console.error('Error al enviar la reacción:', error);
+          }
+        });
+      } else {
+        alert('Por favor, selecciona una reacción antes de enviar.');
+      }
+}
+
+// Delegación de eventos para el botón enviado dinámicamente
+$(document).on('click', '#send-btn', function() {
+    enviarReaccion();
+});
+
+
+
     // Handle form submit
     // Start of Selection
     $("#toggle-suggestions").on("click", function (event) {
@@ -201,7 +239,38 @@ $("#select").on("change", function (event) {
         
         // Limpiar imágenes previas
         imagesContainer.empty(); 
+
+        $("#reacionContainer").removeAttr("hidden",false);
+        $('#reacionContainer').html(`
         
+        <legend class="card-title mb-3">¿Te gustó la recomendación?</legend>
+
+        <!-- Me gusta -->
+        <label for="me-gusta" class="d-flex align-items-center mb-3 p-2 border rounded hover-shadow">
+        <span class="me-2">👍</span> Me gusta
+        <input type="radio" name="reaction" class="form-check-input ms-auto" id="me-gusta" value="Me gusta" />
+        </label>
+
+        <!-- No me gusta -->
+        <label for="no-me-gusta" class="d-flex align-items-center mb-3 p-2 border rounded hover-shadow">
+        <span class="me-2">👎</span> No me gusta
+        <input type="radio" name="reaction" class="form-check-input ms-auto" id="no-me-gusta" value="No me gusta" />
+        </label>
+
+        <!-- Indiferente -->
+        <label for="indiferente" class="d-flex align-items-center mb-3 p-2 border rounded hover-shadow">
+        <span class="me-2">😐</span> Indiferente
+        <input type="radio" name="reaction" class="form-check-input ms-auto" id="indiferente" value="Indiferente" />
+        </label>
+
+        <!-- Normal -->
+        <label for="normal" class="d-flex align-items-center mb-3 p-2 border rounded hover-shadow">
+        <span class="me-2">🙂</span> Normal
+        <input type="radio" name="reaction" class="form-check-input ms-auto" id="normal" value="Normal" />
+        </label>
+        <button id="send-btn" class="btn btn-success">Enviar</button>
+
+            `)
         // Recorrer todas las propiedades del objeto data
         Object.keys(data).forEach(function (key) {
             // Verificar si la propiedad comienza con "images"
@@ -217,6 +286,11 @@ $("#select").on("change", function (event) {
                 });
             }
         });
+
+
+
+
+
     },
     error: function (error) {
         console.error("Error:", error);
@@ -227,10 +301,6 @@ $("#select").on("change", function (event) {
     },
 });
 
-  
-
-        // Agregar botón de eliminar al contenedor
-        
     });
 
     // Al hacer clic en una miniatura, abrir el modal y mostrar la imagen seleccionada en el carrusel
