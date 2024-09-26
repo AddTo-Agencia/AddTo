@@ -13,10 +13,10 @@ from labels import carpetas,categorias,SubCarpeta,subCarpetaHombre,subCarpetaMuj
 
 
 # Cargar los modelos y vectorizador
-modelo = joblib.load('./Models/model_x.pkl')
+#modelo = joblib.load('./Models/model_x.pkl')
 
 modelo_mujer = joblib.load('./Models/model_x_mujer.pkl')
-modelo_hombre = joblib.load('./Models/model_x_hombre.pkl')
+modelo_hombre = joblib.load('./Models/model_x_hombre (1).pkl')
 
 vectorizadorMujer = joblib.load('./Models/vectorizadorMujer.pkl')
 vectorizadorHombre = joblib.load('./Models/vectorizadorHombre.pkl')
@@ -74,8 +74,7 @@ def predict():
 
         # Extraer características y procesar el texto
         df = extract_caracteristicas(texto)
-        print(f"Data extraída: {df}")
-        
+
         vectorizador = {}
 
         # Determinar el modelo y las subcarpetas según el género
@@ -90,7 +89,7 @@ def predict():
 
         # Preprocesar y vectorizar los datos
         df_final = preprocess_and_vectorize(df, vectorizador)
-
+       
         # Realizar la predicción
         prediccion = model.predict(df_final)
         print(f"Predicción: {prediccion}")

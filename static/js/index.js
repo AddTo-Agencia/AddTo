@@ -167,6 +167,7 @@ $("#select").on("change", function (event) {
    const valor = $(this).val();
    $('.hombre, .mujer').attr('hidden', true); // Ocultar todos los elementos al principio
 
+   $('#name').val('');
    if(valor == 'hombre'){
       $('.hombre').removeAttr('hidden'); // Mostrar solo los elementos de hombre
    } else if(valor == 'mujer'){
