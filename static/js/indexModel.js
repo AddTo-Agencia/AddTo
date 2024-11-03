@@ -3,56 +3,17 @@ $(document).ready(function () {
     // Diccionario de características físicas
     const caracteristicas_fisicas = {
         "Género": ['hombre', 'mujer'],
-        "Tono de piel": [
-            "blanco",
-            "trigueño",
-            "moreno",
-            "oscuro",
-            "negro",
-            "blanca",
-            "trigueña",
-            "morena",
-            "oscura",
-            "negra",
-        ],
-        "Forma del rostro": [
-            "redondo",
-            "ovalado",
-            "cuadrado",
-            "rectangular",
-            "corazón",
-            "alargado",
-            "diamante",
-        ],
-        "Contextura física": [
-            "delgado",
-            "normal",
-            "atlético",
-            "corpulento",
-            "gordo",
-        ],
+        "Tono de piel": ["blanco","trigueño","moreno","oscuro","negro","blanca","trigueña","morena","oscura","negra"],
+        "Forma del rostro": ["redondo", "ovalado", "cuadrado","rectangular","corazón","alargado","diamante",],
+        "Contextura física": ["delgado","normal", "atlético","corpulento","gordo"],
         "Longitud del cuello": ["corto", "medio", "largo"],
         "Ancho de muñeca": ["delgada", "media", "ancha"],
-        Estatura: ["baja", "alta"],
-        Altura: ["baja", "media", "alta"],
+        "Estatura": ["baja", "alta"],
+        "Altura": ["baja", "media", "alta"],
         "Textura de piel": ["suave", "áspera", "mixta", "grasosa", "seca"],
-        "Color de ojos": [
-            "azules",
-            "verdes",
-            "marrón",
-            "avellana",
-            "gris",
-            "negros",
-        ],
+        "Color de ojos": ["azules","verdes","marrón","avellana","gris", "negros"],
         "Color de cabello": ["castaño", "negro", "canoso", "rubio", "pelirrojo"],
-        "Estilo de cabello": [
-            "corto",
-            "medio",
-            "largo",
-            "rizado",
-            "liso",
-            "ondulado",
-        ],
+        "Estilo de cabello": ["corto","medio","largo","rizado","liso","ondulado"],
         "Personalidad": ['tranquilo', 'introvertido', 'cauteloso', 'convencional',
             'sociable', 'reservado', 'conformista', 'pragmático', 'rígido',
             'humilde', 'paciente', 'resiliente', 'negativo', 'conservador',
@@ -106,10 +67,6 @@ $(document).ready(function () {
         return count;
     }
 
-    function autoResize(textarea) {
-        textarea.style.height = 'auto'; // Reset height to calculate new height
-        textarea.style.height = (textarea.scrollHeight) + 'px'; // Set height based on scroll height
-      }
 
     // Manejar cambios en el campo de texto
     $("#name").on("input", function () {
@@ -184,7 +141,9 @@ const enviarReaccion = () =>{
   
       if (selectedReaction) {
         // Enviar la reacción al endpoint /send
-        $("#reacionContainer").attr("hidden",true);
+        $("#btnSendReaction").attr("hidden",true);
+        $("#reacciones").attr("hidden",true);
+        
         $.ajax({
           url: '/send',
           method: 'POST',
@@ -209,100 +168,126 @@ const enviarReaccion = () =>{
 
 // Delegación de eventos para el botón enviado dinámicamente
 $(document).on('click', '#send-btn', function() {
-    enviarReaccion();
+  enviarReaccion();
 });
 
 
 
-    // Handle form submit
-    // Start of Selection
-    $("#toggle-suggestions").on("click", function (event) {
-        event.preventDefault();
+const itemsPerPage = 3;
+let currentPage = 0; 
+let allImages = [];
 
-        let nameInput = $("#name").val();
-        const imagesContainer = $("#recommended-images");
-        imagesContainer.empty(); // Limpiar imágenes previas
-        const genero = $(this).val();
+// Lógica del botón de sugerencias
+$("#toggle-suggestions").on("click", function (event) {
+  event.preventDefault();
 
-        nameInput += ","+genero;
+  let nameInput = $("#name").val();
+  const genero = $(this).val();
+  nameInput += "," + genero;
 
-        $("#spinner").removeClass("hidden");
-        $(".container").addClass("opacity-50");
+  $("#spinner").removeClass("hidden");
+  $(".container").addClass("opacity-50");
+  $(".container").addClass("disabled");
+  
+  
+  $("#recommended-images").attr("hidden",true);
+  $("#btnSendReaction").attr("hidden",true);
+  $("#reacciones").attr("hidden",true);
+  $("#reacionContainer").attr("hidden",true);
 
-        // Simulación de petición AJAX
-       $.ajax({
+  $.ajax({
     url: "/predict",
     method: "POST",
     contentType: "application/json",
     data: JSON.stringify({ texto: nameInput }),
     success: function (data) {
-        console.log(data);
-        
-        // Limpiar imágenes previas
-        imagesContainer.empty(); 
+      console.log(data);
+      allImages = []; // Reiniciar el array de imágenes
 
-        $("#reacionContainer").removeAttr("hidden",false);
-        $('#reacionContainer').html(`
-        
-        <legend class="card-title mb-3">¿Te gustó la recomendación?</legend>
+      // Recorrer todas las propiedades del objeto data
+      Object.keys(data).forEach(function (key) {
+        if (key.startsWith("images") && data[key] && data[key].length > 0) {
+          data[key].forEach(function (imageUrl) {
+            allImages.push(imageUrl);
+          });
+        }
+      });
 
-        <!-- Me gusta -->
-        <label for="me-gusta" class="d-flex align-items-center mb-3 p-2 border rounded hover-shadow">
-        <span class="me-2">👍</span> Me gusta
-        <input type="radio" name="reaction" class="form-check-input ms-auto" id="me-gusta" value="Me gusta" />
-        </label>
-
-        <!-- No me gusta -->
-        <label for="no-me-gusta" class="d-flex align-items-center mb-3 p-2 border rounded hover-shadow">
-        <span class="me-2">👎</span> No me gusta
-        <input type="radio" name="reaction" class="form-check-input ms-auto" id="no-me-gusta" value="No me gusta" />
-        </label>
-
-        <!-- Indiferente -->
-        <label for="indiferente" class="d-flex align-items-center mb-3 p-2 border rounded hover-shadow">
-        <span class="me-2">😐</span> Indiferente
-        <input type="radio" name="reaction" class="form-check-input ms-auto" id="indiferente" value="Indiferente" />
-        </label>
-
-        <!-- Normal -->
-        <label for="normal" class="d-flex align-items-center mb-3 p-2 border rounded hover-shadow">
-        <span class="me-2">🙂</span> Normal
-        <input type="radio" name="reaction" class="form-check-input ms-auto" id="normal" value="Normal" />
-        </label>
-        <button id="send-btn" class="btn btn-success">Enviar</button>
-
-            `)
-        // Recorrer todas las propiedades del objeto data
-        Object.keys(data).forEach(function (key) {
-            // Verificar si la propiedad comienza con "images"
-            if (key.startsWith("images") && data[key] && data[key].length > 0) {
-                // Recorrer cada array de imágenes dentro de la propiedad
-                data[key].forEach(function (imageUrl, index) {
-                    const imageElement = `
-                        <div class="image-thumb card cursor-pointer w-auto">
-                            <img src="${imageUrl}" class="w-full h-auto rounded-lg shadow-md" alt="Image ${index + 1}" data-index="${index}">
-                        </div>
-                    `;
-                    imagesContainer.append(imageElement);
-                });
-            }
-        });
-
-
-
-
-
+      displayImages();
     },
     error: function (error) {
-        console.error("Error:", error);
+      console.error("Error:", error);
     },
     complete: function () {
-        $("#spinner").addClass("hidden");
-        $(".container").removeClass("opacity-50");
+      $("#spinner").addClass("hidden");
+      $(".container").removeClass("opacity-50");
+      $(".container").removeClass("disabled");
+      
+      $("#reacionContainer").removeAttr("hidden");
+      $("#recommended-images").attr("hidden",false);
+      
+      setTimeout(()=>{
+        $("#btnSendReaction").removeAttr("hidden");
+        $("#reacciones").removeAttr("hidden");
+        
+      },4000)
+
     },
+  });
 });
 
-    });
+// Función para mostrar imágenes en el carrusel
+function displayImages() {
+  const imagesContainer = $("#recommended-images");
+  imagesContainer.empty(); // Limpiar contenedor
+
+  // Añadir imágenes al contenedor
+  allImages.forEach((imageUrl) => {
+    const imageElement = `
+      <div class="w-1/3 p-2 flex-shrink-0">
+        <img src="${imageUrl}" class="w-full h-auto rounded-lg shadow-md" alt="Image">
+      </div>
+    `;
+    imagesContainer.append(imageElement);
+  });
+
+  updateSlidePosition();
+  updateNavigationButtons();
+}
+
+// Función para actualizar la posición del carrusel
+function updateSlidePosition() {
+  const imagesContainer = $("#recommended-images");
+  const translateXValue = -(currentPage * 100);
+  imagesContainer.css("transform", `translateX(${translateXValue}%)`);
+}
+
+// Función para actualizar los botones de navegación
+function updateNavigationButtons() {
+  const totalPages = Math.ceil(allImages.length / itemsPerPage);
+ // $("#prevButton").toggle(currentPage > 0);
+ // $("#nextButton").toggle(currentPage < totalPages - 1);
+}
+
+// Manejo de eventos para los botones de navegación
+$("#prevButton").on("click", function () {
+  if (currentPage > 0) {
+    currentPage--;
+    updateSlidePosition();
+    updateNavigationButtons();
+  }
+});
+
+$("#nextButton").on("click", function () {
+  const totalPages = Math.ceil(allImages.length / itemsPerPage);
+  if (currentPage < totalPages - 1) {
+    currentPage++;
+    updateSlidePosition();
+    updateNavigationButtons();
+  }
+});
+
+
 
     // Al hacer clic en una miniatura, abrir el modal y mostrar la imagen seleccionada en el carrusel
     $(document).on("click", ".image-thumb img", function () {
@@ -335,5 +320,13 @@ $(document).on('click', '#send-btn', function() {
 
 
 
+
+
+
+
+
+
+
+    
    
 });
