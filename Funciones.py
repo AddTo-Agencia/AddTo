@@ -7,59 +7,44 @@ from fuzzywuzzy import fuzz, process
 import numpy as np
 import yagmail
 
+from vistahtml import vistaHtml
 
 # Cargar el modelo de lenguaje en español
 nlp = spacy.load("es_core_news_sm")
 
 def fuzzy_match(token, choices, threshold=80):
     match, score = process.extractOne(token, choices, scorer=fuzz.token_sort_ratio)
-    if score >= threshold:
-        return match
-    return None
+    return match if score >= threshold else None
 
 def extract_caracteristicas(text):
-    # Procesar el texto con spaCy
+    # Procesar texto
     doc = nlp(text.lower())
     found_caracteristicas_fisicas = {}
-    found_personalidades = []
-    found_categorias = None  # Cambiar found_categorias para que sea un valor escalar
-    found_eventos = {}
-    found_genero = ""
-
-    # Convertir las características físicas, eventos y géneros a minúsculas para la comparación
+    found_personalidades, found_eventos = [], {}
+    found_categorias, found_genero = None, ""
+    
+    # Convertir listas a minúsculas para comparación
     caracteristicas_fisicas_lower = {k.lower(): [v.lower() for v in vs] for k, vs in caracteristicas_fisicas.items()}
     eventos_lower = [e.lower() for e in Eventos["Evento"]]
-    
-    # Convertir géneros a minúsculas para comparación
-    generos_m_lower = [g.lower() for g in generos['M']]
-    generos_f_lower = [g.lower() for g in generos['F']]
-
-    # Buscar personalidades en el texto usando fuzzy matching
+    generos_m_lower, generos_f_lower = [g.lower() for g in generos['M']], [g.lower() for g in generos['F']]
     personalidades_lower = [p.lower() for p in personalidades]
-    
-    for token in doc:
-        match = fuzzy_match(token.text.lower(), personalidades_lower)
-        if match:
-            found_personalidades.append(match)
-    
-    # Buscar categorías en el texto
-    for token in doc:
-        for categoria, valor in categorias.items():
-            if categoria.lower() in token.text.lower():
-                found_categorias = categoria  # Almacena el valor de la categoría encontrada
-                break  # Rompe el bucle si se encuentra una categoría
-          
-    # Buscar características físicas en el texto usando fuzzy matching
-    for key, values in caracteristicas_fisicas_lower.items():
-        for token in doc:
-            match = fuzzy_match(token.text.lower(), values)
-            if match:
-                found_caracteristicas_fisicas[key] = match
-                break
-        else:
-            found_caracteristicas_fisicas[key] = 'Desconocido'  # Asignar 'Desconocido' si no se encuentra
 
-    # Buscar el género en el texto usando fuzzy matching
+    # Fuzzy match para personalidades
+    found_personalidades = [fuzzy_match(token.text.lower(), personalidades_lower) for token in doc if fuzzy_match(token.text.lower(), personalidades_lower)]
+    
+    # Buscar categoría
+    for token in doc:
+        for categoria in categorias:
+            if categoria.lower() in token.text.lower():
+                found_categorias = categoria
+                break
+        if found_categorias: break
+
+    # Fuzzy match para características físicas
+    for key, values in caracteristicas_fisicas_lower.items():
+        found_caracteristicas_fisicas[key] = next((fuzzy_match(token.text.lower(), values) for token in doc if fuzzy_match(token.text.lower(), values)), 'Desconocido')
+    
+    # Fuzzy match para género
     for token in doc:
         if fuzzy_match(token.text.lower(), generos_m_lower):
             found_genero = "hombre"
@@ -68,38 +53,23 @@ def extract_caracteristicas(text):
             found_genero = "mujer"
             break
 
-    # Buscar eventos en el texto usando fuzzy matching
-    for token in doc:
-        match = fuzzy_match(token.text.lower(), eventos_lower)
-        if match:
-            found_eventos[match] = match
+    # Fuzzy match para eventos
+    found_eventos = {token.text.lower(): fuzzy_match(token.text.lower(), eventos_lower) for token in doc if fuzzy_match(token.text.lower(), eventos_lower)}
+    eventos_str = ', '.join(found_eventos.values()) or 'Desconocido'
 
-    # Verificación de found_eventos
-    if isinstance(found_eventos, dict):
-        eventos_str = ', '.join(found_eventos.values()) or 'Desconocido'
-    else:
-        eventos_str = 'Desconocido'
-
-    # Verificación de found_categorias
-    found_categorias = found_categorias or 'Desconocido'
-
-    # Crear el DataFrame
+    # Crear DataFrame
     df_data = {
-        'Categoría': found_categorias ,
-        #'Género': found_genero or 'Desconocido',
-        'Tono de piel': found_caracteristicas_fisicas.get('tono de piel', 'Desconocido') or 'Desconocido',
-        'Forma del rostro': found_caracteristicas_fisicas.get('forma del rostro', 'Desconocido') or 'Desconocido',
-        'Contextura física': found_caracteristicas_fisicas.get('contextura física', 'Desconocido') or 'Desconocido',
-        'Longitud del cuello': found_caracteristicas_fisicas.get('longitud del cuello', 'Desconocido') or 'Desconocido',
-        'Estatura': found_caracteristicas_fisicas.get('estatura', 'Desconocido') or 'Desconocido',       
+        'Categoría': found_categorias or 'Desconocido',
+        'Tono de piel': found_caracteristicas_fisicas.get('tono de piel', 'Desconocido'),
+        'Forma del rostro': found_caracteristicas_fisicas.get('forma del rostro', 'Desconocido'),
+        'Contextura física': found_caracteristicas_fisicas.get('contextura física', 'Desconocido'),
+        'Longitud del cuello': found_caracteristicas_fisicas.get('longitud del cuello', 'Desconocido'),
+        'Estatura': found_caracteristicas_fisicas.get('estatura', 'Desconocido'),
         'personalidad': ', '.join(found_personalidades) or 'Desconocido',
-        'Evento': eventos_str  # Verificación agregada
+        'Evento': eventos_str
     }
     
-    df = pd.DataFrame([df_data])
-    
-    return expand_all_columns(df)
-
+    return expand_all_columns(pd.DataFrame([df_data]))
 
 
 
@@ -133,48 +103,7 @@ def enviar_correo(Edad, mensaje):
     import yagmail
     yag = yagmail.SMTP('odiseorincon@gmail.com', 'zwts ittk yfpm cvmi')
 
-    mensaje_html = f"""
-        <html>
-        <head>
-            <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-            <style>
-                body {{
-                    background-color: #f8f9fa;
-                    padding: 24px;
-                    font-family: 'Arial', sans-serif;
-                }}
-                .card {{
-                    max-width: 400px;
-                    margin: 0 auto;
-                    border-radius: 15px;
-                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                    padding: 20px;
-                }}
-                .user-age {{
-                    color: #6c757d;
-                }}
-                .message {{
-                    margin-top: 16px;
-                    color: #495057;
-                    font-size: 16px;
-                    line-height: 1.5;
-                }}
-            </style>
-        </head>
-        <body>
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Información del Usuario</h5>
-                    <p class="card-text user-age"><strong>{Edad}</strong> años de Edad</p>
-                    <hr>
-                    <div class="message">
-                        {mensaje}
-                    </div>
-                </div>
-            </div>
-        </body>
-        </html>
-        """
+    mensaje_html = vistaHtml(mensaje,Edad)
 
     try:
         # Enviar el correo con el contenido HTML
