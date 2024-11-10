@@ -1,3 +1,4 @@
+
 carpetas = {
  'Anillo_boda_hombre': 0,
  'Anillo_boda_hombre ': 1,
@@ -9,7 +10,6 @@ carpetas = {
  'Anillos_quinceñeras ': 7,
  'Collar_colgante_femenino ': 8
 }
-
 
 
 categorias = {
@@ -66,8 +66,20 @@ SubCarpeta = {
  'Reloj_masculino / D': 38
  }
 
+categorias = {
+ 'Anillo de boda': 0,
+ 'Anillo de compromiso': 1,
+ 'Anillo': 2,
+ 'Collar con colgante': 3,
+ 'Collar de perlas': 4,
+ 'Gargantillas femeninas': 5,
+ 'Pulsera masculina': 6,
+ 'Reloj masculino': 7
+}
+
+
 subCarpetaHombre= {
-    'Anillo_boda_hombre / A': 0,
+ 'Anillo_boda_hombre / A': 0,
  'Anillo_boda_hombre / B': 1,
  'Anillo_boda_hombre / C': 2,
  'Anillo_boda_hombre / D': 3,
@@ -81,10 +93,12 @@ subCarpetaHombre= {
  'reloj_masculino / A': 11,
  'reloj_masculino / B': 12,
  'reloj_masculino / C': 13,
- 'reloj_masculino / D': 14}
+ 'reloj_masculino / D': 14
+}
 
 
-subCarpetaMujer= {'Anillo_boda_mujer  / A': 0,
+subCarpetaMujer= {
+ 'Anillo_boda_mujer  / A': 0,
  'Anillo_boda_mujer  / B': 1,
  'Anillo_compromiso_mujer / A': 2,
  'Anillo_compromiso_mujer / B': 3,
@@ -107,4 +121,9 @@ subCarpetaMujer= {'Anillo_boda_mujer  / A': 0,
  'Collar_perlas_femenino / D': 20,
  'Collar_perlas_femenino / E': 21,
  'Gargantillas_femeninas / A': 22,
- 'Gargantillas_femeninas / B': 23}
+ 'Gargantillas_femeninas / B': 23
+}
+
+
+
+

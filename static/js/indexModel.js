@@ -174,63 +174,55 @@ const itemsPerPage = 3;
 let currentPage = 0; 
 let allImages = [];
 
-// Lógica del botón de sugerencias
 $("#toggle-suggestions").on("click", function (event) {
   event.preventDefault();
 
-  let nameInput = $("#name").val();
+  const nameInput = $("#name").val();
   const genero = $(this).val();
-  nameInput += "," + genero;
+  const fullInput = `${nameInput},${genero}`;
 
   $("#spinner").removeClass("hidden");
-  $(".container").addClass("opacity-50");
-  $(".container").addClass("disabled");
+  $(".container").toggleClass("opacity-50 disabled", true);
   
-  
-  $("#recommended-images").attr("hidden",true);
-  $("#btnSendReaction").attr("hidden",true);
-  $("#reacciones").attr("hidden",true);
-  $("#reacionContainer").attr("hidden",true);
+  $("#recommended-images, #btnSendReaction, #reacciones, #reacionContainer").attr("hidden", true);
 
   $.ajax({
     url: "/predict",
     method: "POST",
     contentType: "application/json",
-    data: JSON.stringify({ texto: nameInput }),
+    data: JSON.stringify({ texto: fullInput }),
     success: function (data) {
       console.log(data);
-      allImages = []; // Reiniciar el array de imágenes
-
-      // Recorrer todas las propiedades del objeto data
-      Object.keys(data).forEach(function (key) {
-        if (key.startsWith("images") && data[key] && data[key].length > 0) {
-          data[key].forEach(function (imageUrl) {
-            allImages.push(imageUrl);
-          });
-        }
-      });
-
-      displayImages();
+      // Reiniciar y asignar imágenes dependiendo del contenido de `images_busqueda`
+      allImages = (data['images_busqueda'] && data['images_busqueda'].length > 0)
+                        ? data['images_busqueda']
+                        : data['images'];
+      console.log(allImages)
+      displayImages(); // Pasar las imágenes directamente a la función
     },
     error: function (error) {
       console.error("Error:", error);
     },
     complete: function () {
       $("#spinner").addClass("hidden");
-      $(".container").removeClass("opacity-50");
-      $(".container").removeClass("disabled");
+      $(".container").toggleClass("opacity-50 disabled", false);
       
-      $("#reacionContainer").removeAttr("hidden");
-      $("#recommended-images").attr("hidden",false);
+      $("#recommended-images, #reacionContainer").removeAttr("hidden");
       
-      setTimeout(()=>{
-        $("#btnSendReaction").removeAttr("hidden");
-        $("#reacciones").removeAttr("hidden");
-        
-      },4000)
-
+      setTimeout(() => {
+        $("#btnSendReaction, #reacciones").removeAttr("hidden");
+      }, 4000);
     },
   });
+});
+
+$('#useBtnEjemplo').on('click', function () {
+  // Selecciona el primer div que no esté oculto y encuentra el párrafo de texto
+  let exampleText = $('.hombre, .mujer').not('[hidden]').find('p.mt-3').text();
+  
+  // Pone el texto del ejemplo en el textarea con id 'name'
+  $('#name').val(exampleText);
+  $("#toggle-suggestions").prop("disabled", false);
 });
 
 // Función para mostrar imágenes en el carrusel

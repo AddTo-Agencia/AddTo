@@ -2,13 +2,18 @@ import os
 from flask import Flask, request, render_template, jsonify
 import joblib
 from Funciones import (
+    detectar_categoria_subcarpeta,
     enviar_correo,
     extract_caracteristicas,
     categorize_predictions,
+    obtener_subcarpeta,
+    obtener_subcarpeta_r,
     get_images_from_folder
 )
 from vectorize import preprocess_and_vectorize
 from labels import subCarpetaHombre, subCarpetaMujer
+import scipy
+import pandas as pd
 
 # Cargar modelos y vectorizadores
 modelo_mujer = joblib.load('./Models/model_x_mujer.pkl')
@@ -36,33 +41,72 @@ def send():
     respuesta = enviar_correo(edad, mensaje)
     return jsonify(respuesta)
 
-# Predicción
+
+
 @app.route('/predict', methods=['POST'])
 def predict():
+    # Obtener datos JSON y extraer el texto proporcionado
     data = request.get_json()
     texto = data.get('texto')
     
     if not texto:
         return jsonify({'error': 'El texto es requerido'}), 400
 
-    df = extract_caracteristicas(texto)
+    # Extracción de características
+    try:
+        df = extract_caracteristicas(texto)
+    except Exception as e:
+        return jsonify({'error': f'Error al extraer características: {str(e)}'}), 500
+
+    # Determinar el género y seleccionar el modelo y vectorizador adecuados
+    genero = 'hombre' if 'hombre' in texto.lower() else 'mujer'
     model, vectorizador, subcarpeta = (
         (modelo_hombre, vectorizadorHombre, subCarpetaHombre) 
-        if 'hombre' in texto else 
+        if genero == 'hombre' else 
         (modelo_mujer, vectorizadorMujer, subCarpetaMujer)
     )
     
-    df_final = preprocess_and_vectorize(df, vectorizador)
-    prediccion = model.predict(df_final)
-    categorias = categorize_predictions(prediccion, subcarpeta)
+    try:
+        # Procesar y vectorizar el DataFrame de características
+        df_final = preprocess_and_vectorize(df, vectorizador)
+        
+        # Convertir a DataFrame si la matriz es dispersa
+        if isinstance(df_final, scipy.sparse.csr_matrix):
+            df_final = pd.DataFrame(df_final.toarray())
+        
+        # Realizar la predicción
+        prediccion = model.predict(df_final)
+        print(df)
+        
+        # Clasificar las predicciones en categorías
+        categorias = categorize_predictions(prediccion, subcarpeta)
+        print('Categoria', categorias)
+        
+    except Exception as e:
+        return jsonify({'error': f'Error en la predicción: {str(e)}'}), 500
+    
+    # Clasificación adicional para subcarpetas si es relevante
 
-    # Preparar respuesta con imágenes por categoría
-    respuesta = {
-        f'images{idx if idx > 0 else ""}': get_images_from_folder(os.path.join('./static/Imágenes_joyería', categoria.replace(' ', '')))
-        for idx, categoria in enumerate(categorias)
-    }
+    # Preparar respuesta, incluyendo imágenes por cada categoría
+    respuesta = {}
+    for idx, categoria in enumerate(categorias):
+        categoria_key = f'images{idx if idx > 0 else ""}'
+        respuesta[categoria_key] = get_images_from_folder(categoria.replace(' ', ''))
+    
+    if df['Categoría'][0] and df['Categoría'][0] != 'Desconocido':
+     print(obtener_subcarpeta_r(genero, 'Pulsera masculina'))
+     busqueda = obtener_subcarpeta_r(genero, df['Categoría'][0])
+    else:
+     busqueda = {}
 
+
+    # Agregar resultados de la búsqueda a la respuesta si están disponibles
+    if busqueda:
+        respuesta['images_busqueda'] = get_images_from_folder(busqueda.replace(' ', ''))
+    
     return jsonify(respuesta)
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
