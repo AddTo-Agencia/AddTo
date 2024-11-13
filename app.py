@@ -5,7 +5,6 @@ from Funciones import (
     enviar_correo,
     extract_caracteristicas,
     categorize_predictions,
-    obtener_subcarpeta,
     obtener_subcarpeta_r,
     get_images_from_folder
 )

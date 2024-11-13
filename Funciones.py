@@ -157,10 +157,11 @@ def obtener_subcarpeta_r(genero, categoria):
     return random.choice(subcarpetas_filtradas) if subcarpetas_filtradas else "No se encontraron subcarpetas para esta combinación"
 
 
-
+'''
 def obtener_subcarpeta(genero, descripcion):
     subcarpetas = subCarpetaHombre if genero.lower() == 'hombre' else subCarpetaMujer if genero.lower() == 'mujer' else None
     return classifier1(descripcion, subcarpetas)["labels"][0] if subcarpetas else "Género no reconocido"
+'''
 
 
 def split_column_and_expand(df, column):
@@ -172,3 +173,7 @@ def expand_all_columns(df):
         if df[col].str.contains(',').any():
             df = split_column_and_expand(df, col)
     return df
+
+
+
+
