@@ -89,15 +89,14 @@ def get_images_from_folder(folder_path):
     return []
 
 
-
 classifier = pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli")
 
 def detectar_categoria_subcarpeta(texto_usuario):
     genero = "hombre" if re.search(r"\bhombre\b", texto_usuario, re.IGNORECASE) else "mujer"
     categoria = classifier(texto_usuario, list(categorias.keys()))["labels"][0]
-    subcarpetas = [s for s in SubCarpeta if categoria.split()[0].lower() in s.lower() and genero in s.lower()]
-    subcarpeta = classifier(texto_usuario, subcarpetas)["labels"][0] if subcarpetas else "No se encontró una subcarpeta adecuada"
-    return {"categoria": categoria, "subcarpeta": subcarpeta, "genero_detectado": genero}
+    return {"categoria": categoria, "genero_detectado": genero}
+
+    
 
 '''
 def obtener_subcarpeta(genero, descripcion):
