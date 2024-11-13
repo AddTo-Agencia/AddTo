@@ -5,7 +5,7 @@ from labels import carpetas,categorias,SubCarpeta,subCarpetaHombre,subCarpetaMuj
 import os
 from fuzzywuzzy import fuzz, process
 import yagmail
-#from transformers import pipeline
+from transformers import pipeline
 import random
 from vistahtml import vistaHtml
 import re
@@ -14,7 +14,6 @@ import re
 # Cargar el modelo de lenguaje en español
 nlp = spacy.load("es_core_news_sm")
 
-#classifier = pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli")
 #classifier1 = pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli")
 
 def fuzzy_match(token, choices, threshold=80):
@@ -89,8 +88,9 @@ def get_images_from_folder(folder_path):
         ]
     return []
 
-'''
 
+
+classifier = pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli")
 
 def detectar_categoria_subcarpeta(texto_usuario):
     genero = "hombre" if re.search(r"\bhombre\b", texto_usuario, re.IGNORECASE) else "mujer"
@@ -99,6 +99,7 @@ def detectar_categoria_subcarpeta(texto_usuario):
     subcarpeta = classifier(texto_usuario, subcarpetas)["labels"][0] if subcarpetas else "No se encontró una subcarpeta adecuada"
     return {"categoria": categoria, "subcarpeta": subcarpeta, "genero_detectado": genero}
 
+'''
 def obtener_subcarpeta(genero, descripcion):
     subcarpetas = subCarpetaHombre if genero.lower() == 'hombre' else subCarpetaMujer if genero.lower() == 'mujer' else None
     return classifier1(descripcion, subcarpetas)["labels"][0] if subcarpetas else "Género no reconocido"

@@ -2,7 +2,6 @@ import os
 from flask import Flask, request, render_template, jsonify
 import joblib
 from Funciones import (
-    detectar_categoria_subcarpeta,
     enviar_correo,
     extract_caracteristicas,
     categorize_predictions,
