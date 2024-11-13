@@ -5,7 +5,7 @@ from labels import carpetas,categorias,SubCarpeta,subCarpetaHombre,subCarpetaMuj
 import os
 from fuzzywuzzy import fuzz, process
 import yagmail
-from transformers import pipeline
+#from transformers import pipeline
 import random
 from vistahtml import vistaHtml
 import re
@@ -13,8 +13,9 @@ import re
 
 # Cargar el modelo de lenguaje en español
 nlp = spacy.load("es_core_news_sm")
-classifier = pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli")
-classifier1 = pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli")
+
+#classifier = pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli")
+#classifier1 = pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli")
 
 def fuzzy_match(token, choices, threshold=80):
     match, score = process.extractOne(token, choices, scorer=fuzz.token_sort_ratio)
@@ -71,7 +72,7 @@ def categorize_predictions(y_pred, labels):
     return list(set(inverse_labels.get(int(pred), "Unknown") for pred in y_pred))
 
 def enviar_correo(edad, mensaje):
-    import yagmail
+   
     yag = yagmail.SMTP('odiseorincon@gmail.com', 'zwts ittk yfpm cvmi')
     try:
         yag.send(to='addtoagencia@gmail.com', subject='Datos Sobre Usuario', contents=vistaHtml(mensaje, edad))
@@ -88,6 +89,7 @@ def get_images_from_folder(folder_path):
         ]
     return []
 
+'''
 
 
 def detectar_categoria_subcarpeta(texto_usuario):
@@ -101,6 +103,7 @@ def obtener_subcarpeta(genero, descripcion):
     subcarpetas = subCarpetaHombre if genero.lower() == 'hombre' else subCarpetaMujer if genero.lower() == 'mujer' else None
     return classifier1(descripcion, subcarpetas)["labels"][0] if subcarpetas else "Género no reconocido"
 
+'''
 
 
 def obtener_subcarpeta_r(genero, categoria):
@@ -128,6 +131,8 @@ def obtener_subcarpeta_r(genero, categoria):
 
     subcarpetas_filtradas = [sub for sub in subcarpetas if sub in subcarpetas_categoria]
     return random.choice(subcarpetas_filtradas) if subcarpetas_filtradas else "No se encontraron subcarpetas para esta combinación"
+
+
 
 def obtener_subcarpeta(genero, descripcion):
     subcarpetas = subCarpetaHombre if genero.lower() == 'hombre' else subCarpetaMujer if genero.lower() == 'mujer' else None

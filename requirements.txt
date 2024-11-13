@@ -65,7 +65,5 @@ Werkzeug==3.0.4
 wrapt==1.16.0
 xgboost==2.1.1
 yagmail==0.15.293
-transformers
-tensorflow
 tf-keras
 gunicorn
