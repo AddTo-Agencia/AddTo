@@ -94,7 +94,7 @@ def predict():
         respuesta[categoria_key] = get_images_from_folder(categoria.replace(' ', ''))
     
     if df['Categoría'][0] and df['Categoría'][0] != 'Desconocido':
-     print(obtener_subcarpeta_r(genero, 'Pulsera masculina'))
+     print(obtener_subcarpeta_r(genero, df['Categoría'][0]))
      busqueda = obtener_subcarpeta_r(genero, df['Categoría'][0])
     else:
      busqueda = {}

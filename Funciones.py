@@ -9,7 +9,8 @@ from transformers import pipeline
 import random
 from vistahtml import vistaHtml
 import re
-
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 # Cargar el modelo de lenguaje en español
 nlp = spacy.load("es_core_news_sm")
@@ -79,6 +80,8 @@ def enviar_correo(edad, mensaje):
     except Exception as e:
         return f"Error al enviar el correo: {str(e)}"
 
+
+
 def get_images_from_folder(folder_path):
     folder_path = './static/Imágenes_joyería/'+folder_path
     if os.path.isdir(folder_path):
@@ -89,12 +92,33 @@ def get_images_from_folder(folder_path):
     return []
 
 
-classifier = pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli")
+'''
 
+'''
+vectorizer = TfidfVectorizer()
+
+
+# Función para detectar la categoría más cercana utilizando similitud de coseno
 def detectar_categoria_subcarpeta(texto_usuario):
+    # Detectamos el género del usuario buscando palabras clave en el texto
     genero = "hombre" if re.search(r"\bhombre\b", texto_usuario, re.IGNORECASE) else "mujer"
-    categoria = classifier(texto_usuario, list(categorias.keys()))["labels"][0]
-    return {"categoria": categoria, "genero_detectado": genero}
+    
+    # Convertir las categorías a una lista
+    categorias_list = list(categorias.keys())
+    
+    # Combinar el texto del usuario con las categorías para la vectorización
+    documentos = categorias_list + [texto_usuario]  # Añadir el texto del usuario al final
+    
+    # Convertir los textos en vectores TF-IDF
+    tfidf_matrix = vectorizer.fit_transform(documentos)
+    
+    # Calcular la similitud de coseno entre el texto del usuario y las categorías
+    cosine_similarities = cosine_similarity(tfidf_matrix[-1], tfidf_matrix[:-1])
+    
+    # Encontrar la categoría con mayor similitud
+    categoria_detectada = categorias_list[cosine_similarities.argmax()]
+    
+    return {"categoria": categoria_detectada, "genero_detectado": genero}
 
     
 
