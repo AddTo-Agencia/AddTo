@@ -68,3 +68,4 @@ xgboost==2.1.1
 yagmail==0.15.293
 transformers
 tensorflow
+tf-keras
