@@ -72,9 +72,6 @@ spacy
 spacy-legacy
 spacy-loggers
 srsly
-tensorboard
-tensorflow
-tensorflow-intel
 termcolor
 thinc
 threadpoolctl
