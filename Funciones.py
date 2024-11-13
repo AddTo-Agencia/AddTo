@@ -4,7 +4,6 @@ import pandas as pd
 from labels import carpetas,categorias,SubCarpeta,subCarpetaHombre,subCarpetaMujer
 import os
 from fuzzywuzzy import fuzz, process
-import numpy as np
 import yagmail
 from transformers import pipeline
 import random

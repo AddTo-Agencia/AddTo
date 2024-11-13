@@ -15,6 +15,7 @@ from labels import subCarpetaHombre, subCarpetaMujer
 import scipy
 import pandas as pd
 
+
 # Cargar modelos y vectorizadores
 modelo_mujer = joblib.load('./Models/model_x_mujer.pkl')
 modelo_hombre = joblib.load('./Models/model_x_hombre (1).pkl')
