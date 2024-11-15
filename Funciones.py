@@ -93,16 +93,18 @@ def get_images_from_folder(folder_path):
 '''
 
 '''
-classifier = pipeline(
-    "zero-shot-classification", 
-    model="typeform/distilbert-base-uncased-mnli", 
-    framework="pt"
-)
 
-print(f"Framework utilizado: {classifier.framework}") 
+
+
+def get_classifier():
+    return pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli", framework="pt")
+
+
+print(f"Framework utilizado: {get_classifier().framework}") 
 
 def detectar_categoria_subcarpeta(texto_usuario):
     # Extraer las categorías y subcarpetas en listas
+    classifier = get_classifier()
     categorias_lista = list(categorias.keys())
     
     # Clasificar el texto para la mejor coincidencia de categoría
