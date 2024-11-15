@@ -8,7 +8,6 @@ import yagmail
 from transformers import pipeline
 import random
 from vistahtml import vistaHtml
-import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity 
 
