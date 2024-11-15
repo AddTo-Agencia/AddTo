@@ -5,7 +5,7 @@ from labels import carpetas,categorias,SubCarpeta,subCarpetaHombre,subCarpetaMuj
 import os
 from fuzzywuzzy import fuzz, process
 import yagmail
-from transformers import pipeline
+#from transformers import pipeline
 import random
 from vistahtml import vistaHtml
 import re
