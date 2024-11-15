@@ -15,7 +15,6 @@ from sklearn.metrics.pairwise import cosine_similarity
 # Cargar el modelo de lenguaje en español 
 nlp = spacy.load("es_core_news_sm")
 
-classifier = pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli")
 
 def fuzzy_match(token, choices, threshold=80):
     match, score = process.extractOne(token, choices, scorer=fuzz.token_sort_ratio)
@@ -95,22 +94,19 @@ def get_images_from_folder(folder_path):
 '''
 
 '''
+classifier = pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli")
+
 def detectar_categoria_subcarpeta(texto_usuario):
     # Extraer las categorías y subcarpetas en listas
     categorias_lista = list(categorias.keys())
-    subcarpetas_lista = list(SubCarpeta.keys())
     
     # Clasificar el texto para la mejor coincidencia de categoría
     resultado_categoria = classifier(texto_usuario, categorias_lista)
     categoria_detectada = resultado_categoria["labels"][0]
     
     # Filtrar subcarpetas relacionadas con la categoría detectada
-    subcarpetas_filtradas = [subcarpeta for subcarpeta in subcarpetas_lista if categoria_detectada.split()[0].lower() in subcarpeta.lower()]
     
     # Clasificar nuevamente para encontrar la mejor coincidencia de subcarpeta
-    resultado_subcarpeta = classifier(texto_usuario, subcarpetas_filtradas)
-    subcarpeta_detectada = resultado_subcarpeta["labels"][0]
-    
     # Devolver los resultados 
     return {
         "categoria": categoria_detectada,

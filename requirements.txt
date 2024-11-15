@@ -76,8 +76,8 @@ spacy-loggers
 srsly
 tensorboard
 tensorboard-data-server
-tensorflow
-tensorflow_intel
+torch
+
 termcolor
 tf_keras
 thinc
