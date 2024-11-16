@@ -5,11 +5,8 @@ from labels import carpetas,categorias,SubCarpeta,subCarpetaHombre,subCarpetaMuj
 import os
 from fuzzywuzzy import fuzz, process
 import yagmail
-from transformers import pipeline
-import random
+import random 
 from vistahtml import vistaHtml
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity 
 
 # Cargar el modelo de lenguaje en español 
 nlp = spacy.load("es_core_news_sm")
@@ -18,6 +15,8 @@ nlp = spacy.load("es_core_news_sm")
 def fuzzy_match(token, choices, threshold=80):
     match, score = process.extractOne(token, choices, scorer=fuzz.token_sort_ratio)
     return match if score >= threshold else None
+
+
 
 def extract_caracteristicas(text):
     doc = nlp(text.lower())
@@ -32,16 +31,9 @@ def extract_caracteristicas(text):
     # Buscar personalidades
     found_personalidades = list(filter(None, (fuzzy_match(token.text, personalidades_lower) for token in doc)))
 
-    # Buscar categoría
-    found_categorias = next((cat for token in doc for cat in categorias if cat.lower() in token.text.lower()), None)
-
     # Características físicas
     found_caracteristicas = {k: next((fuzzy_match(token.text, vs) for token in doc if fuzzy_match(token.text, vs)), default)
                              for k, vs in caracteristicas_lower.items()}
-
-    # Género
-    found_genero = ("hombre" if any(fuzzy_match(token.text, generos_m_lower) for token in doc) 
-                    else "mujer" if any(fuzzy_match(token.text, generos_f_lower) for token in doc) else "")
 
     # Eventos
     found_eventos = {token.text.lower(): fuzzy_match(token.text.lower(), eventos_lower) for token in doc if fuzzy_match(token.text.lower(), eventos_lower)}
@@ -49,7 +41,7 @@ def extract_caracteristicas(text):
 
     # Crear DataFrame
     df_data = {
-        'Categoría': detectar_categoria_subcarpeta(text)['categoria'],
+        'Categoría': detectar_categoria(text),
         'Tono de piel': found_caracteristicas.get('tono de piel', default),
         'Forma del rostro': found_caracteristicas.get('forma del rostro', default),
         'Contextura física': found_caracteristicas.get('contextura física', default),
@@ -59,7 +51,7 @@ def extract_caracteristicas(text):
         'Evento': eventos_str
     }
     
-    return expand_all_columns(pd.DataFrame([df_data]))
+    return expand_all_columns(pd.DataFrame([df_data])) 
 
 
 
@@ -70,7 +62,6 @@ def categorize_predictions(y_pred, labels):
     return list(set(inverse_labels.get(int(pred), "Unknown") for pred in y_pred))
 
 def enviar_correo(edad, mensaje):
-   
     yag = yagmail.SMTP('odiseorincon@gmail.com', 'zwts ittk yfpm cvmi')
     try:
         yag.send(to='addtoagencia@gmail.com', subject='Datos Sobre Usuario', contents=vistaHtml(mensaje, edad))
@@ -90,43 +81,16 @@ def get_images_from_folder(folder_path):
     return []
 
 
-'''
-
-'''
-
-
-
-def get_classifier():
-    return pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli", framework="pt")
-
-
-print(f"Framework utilizado: {get_classifier().framework}") 
-
-def detectar_categoria_subcarpeta(texto_usuario):
-    # Extraer las categorías y subcarpetas en listas
-    classifier = get_classifier()
-    categorias_lista = list(categorias.keys())
+def detectar_categoria(texto_usuario):
+    # Convertir texto del usuario a minúsculas
+    texto_usuario = texto_usuario.lower()
     
-    # Clasificar el texto para la mejor coincidencia de categoría
-    resultado_categoria = classifier(texto_usuario, categorias_lista)
-    categoria_detectada = resultado_categoria["labels"][0]
+    # Recorrer las categorías y verificar si están en el texto
+    for categoria in categorias:
+        if categoria.lower() in texto_usuario:
+            return categoria  # Devuelve la categoría encontrada
     
-    # Filtrar subcarpetas relacionadas con la categoría detectada
-    
-    # Clasificar nuevamente para encontrar la mejor coincidencia de subcarpeta
-    # Devolver los resultados 
-    return {
-        "categoria": categoria_detectada,
-    }
-
-    
-
-'''
-def obtener_subcarpeta(genero, descripcion):
-    subcarpetas = subCarpetaHombre if genero.lower() == 'hombre' else subCarpetaMujer if genero.lower() == 'mujer' else None
-    return classifier1(descripcion, subcarpetas)["labels"][0] if subcarpetas else "Género no reconocido"
-
-'''
+    return "No se encontró una categoría."
 
 
 def obtener_subcarpeta_r(genero, categoria):

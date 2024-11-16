@@ -5,14 +5,13 @@ gunicorn
 joblib
 pandas
 python-dotenv
-scikit-learn
 scipy
 spacy
-torch
-tf_keras
 tokenizers
-transformers
 xgboost
 yagmail
 nltk
-tensorflow!=*  # Esto prohíbe la instalación de TensorFlow
+scikit-learn
+
+
+
