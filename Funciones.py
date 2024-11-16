@@ -61,82 +61,33 @@ def categorize_predictions(y_pred, labels):
     # Obtener subcarpetas eliminando duplicados
     return list(set(inverse_labels.get(int(pred), "Unknown") for pred in y_pred))
 
-def enviar_correo(edad, mensaje):
-    yag = yagmail.SMTP('odiseorincon@gmail.com', 'zwts ittk yfpm cvmi')
+def enviar_correo(edad, mensaje, destinatario='addtoagencia@gmail.com'):
     try:
-        yag.send(to='addtoagencia@gmail.com', subject='Datos Sobre Usuario', contents=vistaHtml(mensaje, edad))
+        yag = yagmail.SMTP('odiseorincon@gmail.com', 'zwts ittk yfpm cvmi')
+        yag.send(to=destinatario, subject='Datos Sobre Usuario', contents=mensaje)
         return "Correo enviado correctamente."
     except Exception as e:
         return f"Error al enviar el correo: {str(e)}"
 
-
-
 def get_images_from_folder(folder_path):
-    folder_path = './static/Imágenes_joyería/'+folder_path
-    if os.path.isdir(folder_path):
-        return [
-            os.path.join(folder_path, f) for f in os.listdir(folder_path)
-            if os.path.isfile(os.path.join(folder_path, f)) and f.lower().endswith(('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff'))
-        ]
-    return []
+    return [
+        os.path.join(folder_path, f) for f in os.listdir(folder_path)
+        if os.path.isfile(os.path.join(folder_path, f)) and f.lower().endswith(('.jpg', '.jpeg', '.png', '.gif'))
+    ]
 
-
-def detectar_categoria(texto_usuario):
-    # Convertir texto del usuario a minúsculas
+def detectar_categoria(texto_usuario, categorias):
     texto_usuario = texto_usuario.lower()
-    
-    # Recorrer las categorías y verificar si están en el texto
     for categoria in categorias:
         if categoria.lower() in texto_usuario:
-            return categoria  # Devuelve la categoría encontrada
-    
+            return categoria
     return "No se encontró una categoría."
 
-
-def obtener_subcarpeta_r(genero, categoria):
-    subcarpetas = (subCarpetaHombre if genero.lower() == 'hombre' 
-                   else subCarpetaMujer if genero.lower() == 'mujer' 
-                   else None)
-
-    if not subcarpetas:
-        return "Género no reconocido"
-
-    categorias = {
-        'Anillo de boda': ['Anillo_boda_hombre / A', 'Anillo_boda_hombre / B', 'Anillo_boda_hombre / C', 'Anillo_boda_hombre / D', 'Anillo_boda_mujer / A', 'Anillo_boda_mujer / B'],
-        'Anillo de compromiso': ['Anillo_compromiso_mujer / A', 'Anillo_compromiso_mujer / B', 'Anillo_compromiso_mujer / C', 'Anillo_compromiso_mujer / D'],
-        'Anillo': ['Anillos_masculinos / A', 'Anillos_masculinos / B', 'Anillos_masculinos / C', 'Anillos_femeninos / A', 'Anillos_femeninos / B'],
-        'Collar con colgante': ['Collar_colgante_femenino / A', 'Collar_colgante_femenino / B', 'Collar_colgante_femenino / C'],
-        'Collar de perlas': ['Collar_perlas_femenino / A', 'Collar_perlas_femenino / B', 'Collar_perlas_femenino / C', 'Collar_perlas_femenino / D'],
-        'Gargantillas femeninas': ['Gargantillas_femeninas / A', 'Gargantillas_femeninas / B'],
-        'Pulsera masculina': ['pulsera_masculina / A', 'pulsera_masculina / B', 'pulsera_masculina / C', 'pulsera_masculina / D'],
-        'Reloj masculino': ['reloj_masculino / A', 'reloj_masculino / B', 'reloj_masculino / C', 'reloj_masculino / D']
-    }
-
-    subcarpetas_categoria = categorias.get(categoria)
-    if not subcarpetas_categoria:
-        return "Categoría no reconocida"
-
-    subcarpetas_filtradas = [sub for sub in subcarpetas if sub in subcarpetas_categoria]
-    return random.choice(subcarpetas_filtradas) if subcarpetas_filtradas else "No se encontraron subcarpetas para esta combinación"
-
-
-'''
-def obtener_subcarpeta(genero, descripcion):
-    subcarpetas = subCarpetaHombre if genero.lower() == 'hombre' else subCarpetaMujer if genero.lower() == 'mujer' else None
-    return classifier1(descripcion, subcarpetas)["labels"][0] if subcarpetas else "Género no reconocido"
-'''
-
-
-def split_column_and_expand(df, column):
-    df[column] = df[column].astype(str).str.lower().str.split(',').explode().str.strip()
-    return df[df[column].notna() & (df[column] != '')]
+def obtener_subcarpeta_r(genero, categoria, subcarpetas_dict):
+    subcarpetas = subcarpetas_dict.get(genero.lower(), [])
+    return random.choice(subcarpetas.get(categoria, ["No disponible"]))
 
 def expand_all_columns(df):
     for col in df.columns:
-        if df[col].str.contains(',').any():
-            df = split_column_and_expand(df, col)
+        if ',' in str(df[col].iloc[0]):
+            df[col] = df[col].astype(str).str.split(',').explode().str.strip()
     return df
-
-
-
-

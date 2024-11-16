@@ -12,7 +12,7 @@ from vectorize import preprocess_and_vectorize
 from labels import subCarpetaHombre, subCarpetaMujer
 import scipy
 import pandas as pd
-
+import psutil
 
 # Cargar modelos y vectorizadores
 modelo_mujer = joblib.load('./Models/model_x_mujer.pkl')
@@ -41,6 +41,11 @@ def send():
     return jsonify(respuesta)
 
 
+def get_memory_usage():
+    # Obtiene el proceso actual
+    process = psutil.Process(os.getpid())
+    # Retorna el uso de memoria en MB
+    return process.memory_info().rss / (1024 * 1024)
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -97,11 +102,13 @@ def predict():
      busqueda = obtener_subcarpeta_r(genero, df['Categoría'][0])
     else:
      busqueda = {}
-
+     
 
     # Agregar resultados de la búsqueda a la respuesta si están disponibles
     if busqueda:
         respuesta['images_busqueda'] = get_images_from_folder(busqueda.replace(' ', ''))
+    
+    print('Uso de memoria: ',get_memory_usage())
     
     return jsonify(respuesta)
 
